@@ -10,16 +10,10 @@ class MauDspApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MAU DSP',
-      // Permanent, locked-in dark theme with electric blue visualizer aesthetics
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF0D0F12),
         primaryColor: const Color(0xFF00E5FF),
-        colorScheme: const ColorScheme.dark(
-          surface: Color(0xFF161A22),
-          primary: Color(0xFF00E5FF),
-          secondary: Color(0xFF2979FF),
-        ),
       ),
       home: const MauDspScreen(),
     );
@@ -38,9 +32,8 @@ class _MauDspScreenState extends State<MauDspScreen> {
   String activePreset = 'Off';
   double trackProgress = 0.42;
 
-  // Manual configuration tracking for Custom 1 and Custom 2
-  double custom1Value = 5.0; // dB Boost / Filter parameter
-  double custom2Value = 7.5; // Frequency / Delay parameter
+  double custom1Value = 5.0;
+  double custom2Value = 7.5;
 
   void applyPreset(String presetName) {
     setState(() {
@@ -63,13 +56,11 @@ class _MauDspScreenState extends State<MauDspScreen> {
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFF080A0C),
-        elevation: 6,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Blue Visualizer & DSP Status Panel
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -77,13 +68,6 @@ class _MauDspScreenState extends State<MauDspScreen> {
                 color: const Color(0xFF12161F),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: const Color(0xFF00E5FF).withOpacity(0.4), width: 1.5),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF00E5FF).withOpacity(0.1),
-                    blurRadius: 12,
-                    spreadRadius: 2,
-                  ),
-                ],
               ),
               child: Column(
                 children: [
@@ -114,7 +98,6 @@ class _MauDspScreenState extends State<MauDspScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  // Visualizer Graphic Simulation
                   Container(
                     height: 90,
                     width: double.infinity,
@@ -123,39 +106,26 @@ class _MauDspScreenState extends State<MauDspScreen> {
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: const Color(0xFF1F2937)),
                     ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: List.generate(24, (index) {
-                            double heightFactor = (index % 5 == 0) ? 0.7 : ((index * 3) % 8 / 10);
-                            if (!isPlaying) heightFactor = 0.15;
-                            return Container(
-                              width: 6,
-                              height: 60 * heightFactor,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF00E5FF),
-                                borderRadius: BorderRadius.circular(3),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF00E5FF).withOpacity(0.6),
-                                    blurRadius: 6,
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                        ),
-                      ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(24, (index) {
+                        double heightFactor = (index % 5 == 0) ? 0.7 : ((index * 3) % 8 / 10);
+                        if (!isPlaying) heightFactor = 0.15;
+                        return Container(
+                          width: 6,
+                          height: 60 * heightFactor,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF00E5FF),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-
-            // Track Player Metadata & Scrubber
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
@@ -170,21 +140,15 @@ class _MauDspScreenState extends State<MauDspScreen> {
                     style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.2),
                   ),
                   const SizedBox(height: 10),
-                  SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      activeTrackColor: const Color(0xFF00E5FF),
-                      inactiveTrackColor: const Color(0xFF21262D),
-                      thumbColor: Colors.white,
-                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-                    ),
-                    child: Slider(
-                      value: trackProgress,
-                      onChanged: (val) {
-                        setState(() {
-                          trackProgress = val;
-                        });
-                      },
-                    ),
+                  Slider(
+                    value: trackProgress,
+                    activeColor: const Color(0xFF00E5FF),
+                    inactiveColor: const Color(0xFF21262D),
+                    onChanged: (val) {
+                      setState(() {
+                        trackProgress = val;
+                      });
+                    },
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -200,8 +164,6 @@ class _MauDspScreenState extends State<MauDspScreen> {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Transport Play/Pause Core
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -245,8 +207,6 @@ class _MauDspScreenState extends State<MauDspScreen> {
               ],
             ),
             const SizedBox(height: 25),
-
-            // Acoustic & Custom Preset Section
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -260,8 +220,6 @@ class _MauDspScreenState extends State<MauDspScreen> {
               ),
             ),
             const SizedBox(height: 10),
-
-            // Grid for Presets (Stadium, Hall, Large Room, Off, Custom 1, Custom 2)
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
@@ -278,8 +236,6 @@ class _MauDspScreenState extends State<MauDspScreen> {
                 _buildPresetTile('Custom 2', Icons.tune),
               ],
             ),
-
-            // Manual Slider Adjustments if Custom 1 or Custom 2 is active
             if (activePreset == 'Custom 1' || activePreset == 'Custom 2') ...[
               const SizedBox(height: 15),
               Container(
@@ -348,13 +304,6 @@ class _MauDspScreenState extends State<MauDspScreen> {
             color: isActive ? Colors.white : const Color(0xFF21262D),
             width: 1.5,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: isActive ? const Color(0xFF00E5FF).withOpacity(0.4) : Colors.black26,
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
