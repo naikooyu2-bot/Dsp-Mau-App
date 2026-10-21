@@ -201,25 +201,29 @@ class _MauDspHomeState extends State<MauDspHome> {
 
   Widget _buildButton(String name) {
     bool isActive = activePreset == name;
-    return InkWell(
-      onPressed: () {
-        setState(() {
-          activePreset = name;
-        });
-      },
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF00E5FF) : const Color(0xFF161A22),
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: isActive ? Colors.white : const Color(0xFF2B313B)),
-        ),
-        child: Text(
-          name.toUpperCase(),
-          style: TextStyle(
-            color: isActive ? Colors.black : Colors.white70,
-            fontWeight: FontWeight.bold,
-            fontSize: 11,
+    return Material(
+      color: isActive ? const Color(0xFF00E5FF) : const Color(0xFF161A22),
+      borderRadius: BorderRadius.circular(6),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            activePreset = name;
+          });
+        },
+        borderRadius: BorderRadius.circular(6),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: isActive ? Colors.white : const Color(0xFF2B313B)),
+          ),
+          child: Text(
+            name.toUpperCase(),
+            style: TextStyle(
+              color: isActive ? Colors.black : Colors.white70,
+              fontWeight: FontWeight.bold,
+              fontSize: 11,
+            ),
           ),
         ),
       ),
