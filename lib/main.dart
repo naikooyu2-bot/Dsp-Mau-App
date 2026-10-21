@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MauDspApp());
+void main() {
+  runApp(const MauDspApp());
+}
 
 class MauDspApp extends StatelessWidget {
   const MauDspApp({Key? key}) : super(key: key);
@@ -15,42 +17,34 @@ class MauDspApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF0D0F12),
         primaryColor: const Color(0xFF00E5FF),
       ),
-      home: const MauDspScreen(),
+      home: const MauDspHome(),
     );
   }
 }
 
-class MauDspScreen extends StatefulWidget {
-  const MauDspScreen({Key? key}) : super(key: key);
+class MauDspHome extends StatefulWidget {
+  const MauDspHome({Key? key}) : super(key: key);
 
   @override
-  _MauDspScreenState createState() => _MauDspScreenState();
+  State<MauDspHome> createState() => _MauDspHomeState();
 }
 
-class _MauDspScreenState extends State<MauDspScreen> {
+class _MauDspHomeState extends State<MauDspHome> {
   bool isPlaying = false;
   String activePreset = 'Off';
-  double trackProgress = 0.42;
-
   double custom1Value = 5.0;
   double custom2Value = 7.5;
-
-  void applyPreset(String presetName) {
-    setState(() {
-      activePreset = presetName;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'MAU DSP // REFERENCE AUDIO',
+          'MAU DSP // AUDIO',
           style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 2.5,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
             color: Color(0xFF00E5FF),
           ),
         ),
@@ -62,12 +56,11 @@ class _MauDspScreenState extends State<MauDspScreen> {
         child: Column(
           children: [
             Container(
-              width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF12161F),
+                color: const Color(0xFF161A22),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF00E5FF).withOpacity(0.4), width: 1.5),
+                border: Border.all(color: const Color(0xFF00E5FF), width: 1),
               ),
               child: Column(
                 children: [
@@ -75,48 +68,35 @@ class _MauDspScreenState extends State<MauDspScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'DSP PROCESSOR',
-                        style: TextStyle(color: Colors.grey, fontSize: 10, letterSpacing: 1.5),
+                        'DSP STATUS',
+                        style: TextStyle(color: Colors.grey, fontSize: 11),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF00E5FF).withOpacity(0.2),
-                          border: Border.all(color: const Color(0xFF00E5FF)),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          activePreset.toUpperCase(),
-                          style: const TextStyle(
-                            color: Color(0xFF00E5FF),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11,
-                            letterSpacing: 1.0,
-                          ),
+                      Text(
+                        activePreset.toUpperCase(),
+                        style: const TextStyle(
+                          color: Color(0xFF00E5FF),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   Container(
-                    height: 90,
-                    width: double.infinity,
+                    height: 80,
                     decoration: BoxDecoration(
                       color: const Color(0xFF080A0C),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFF1F2937)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(24, (index) {
-                        double heightFactor = (index % 5 == 0) ? 0.7 : ((index * 3) % 8 / 10);
-                        if (!isPlaying) heightFactor = 0.15;
+                      children: List.generate(16, (index) {
                         return Container(
-                          width: 6,
-                          height: 60 * heightFactor,
+                          width: 4,
+                          height: isPlaying ? (15.0 + (index * 4) % 50) : 10.0,
                           decoration: BoxDecoration(
                             color: const Color(0xFF00E5FF),
-                            borderRadius: BorderRadius.circular(3),
+                            borderRadius: BorderRadius.circular(2),
                           ),
                         );
                       }),
@@ -125,101 +105,44 @@ class _MauDspScreenState extends State<MauDspScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: const Color(0xFF12161F),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFF1F2937)),
-              ),
-              child: Column(
-                children: [
-                  const Text(
-                    'MAU STUDIO MASTER - TRACK 01',
-                    style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.2),
+            const SizedBox(height: 30),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isPlaying = !isPlaying;
+                  });
+                },
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFF00E5FF),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF00E5FF).withOpacity(0.4),
+                        blurRadius: 15,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  Slider(
-                    value: trackProgress,
-                    activeColor: const Color(0xFF00E5FF),
-                    inactiveColor: const Color(0xFF21262D),
-                    onChanged: (val) {
-                      setState(() {
-                        trackProgress = val;
-                      });
-                    },
+                  child: Icon(
+                    isPlaying ? Icons.pause : Icons.play_arrow,
+                    size: 40,
+                    color: Colors.black,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('1:35', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                        Text('3:50', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.skip_previous, size: 30, color: Colors.white70),
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isPlaying = !isPlaying;
-                    });
-                  },
-                  child: Container(
-                    width: 65,
-                    height: 65,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xFF00E5FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF00E5FF).withOpacity(0.4),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow,
-                      size: 32,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                IconButton(
-                  icon: const Icon(Icons.skip_next, size: 30, color: Colors.white70),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 30),
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'ACOUSTIC PROFILES & MANUAL PRESETS',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 10,
-                  letterSpacing: 1.5,
-                  fontWeight: FontWeight.bold,
-                ),
+                'ACOUSTIC & CUSTOM PRESETS',
+                style: TextStyle(color: Colors.grey, fontSize: 11, letterSpacing: 1.2),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
@@ -228,57 +151,43 @@ class _MauDspScreenState extends State<MauDspScreen> {
               mainAxisSpacing: 10,
               childAspectRatio: 2.8,
               children: [
-                _buildPresetTile('Stadium', Icons.stadium),
-                _buildPresetTile('Hall', Icons.theater_comedy),
-                _buildPresetTile('Large Room', Icons.room),
-                _buildPresetTile('Off', Icons.power_settings_new),
-                _buildPresetTile('Custom 1', Icons.tune),
-                _buildPresetTile('Custom 2', Icons.tune),
+                _buildButton('Stadium'),
+                _buildButton('Hall'),
+                _buildButton('Large Room'),
+                _buildButton('Off'),
+                _buildButton('Custom 1'),
+                _buildButton('Custom 2'),
               ],
             ),
             if (activePreset == 'Custom 1' || activePreset == 'Custom 2') ...[
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF12161F),
+                  color: const Color(0xFF161A22),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFF00E5FF).withOpacity(0.3)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'MANUAL TUNE: ${activePreset.toUpperCase()}',
-                      style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.0),
+                      'CONFIG: $activePreset',
+                      style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 11, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Text('Level:', style: TextStyle(color: Colors.grey, fontSize: 11)),
-                        Expanded(
-                          child: Slider(
-                            value: activePreset == 'Custom 1' ? custom1Value : custom2Value,
-                            min: 0.0,
-                            max: 10.0,
-                            activeColor: const Color(0xFF00E5FF),
-                            inactiveColor: const Color(0xFF21262D),
-                            onChanged: (val) {
-                              setState(() {
-                                if (activePreset == 'Custom 1') {
-                                  custom1Value = val;
-                                } else {
-                                  custom2Value = val;
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                        Text(
-                          (activePreset == 'Custom 1' ? custom1Value : custom2Value).toStringAsFixed(1),
-                          style: const TextStyle(color: Colors.white, fontSize: 11),
-                        ),
-                      ],
+                    Slider(
+                      value: activePreset == 'Custom 1' ? custom1Value : custom2Value,
+                      min: 0,
+                      max: 10,
+                      activeColor: const Color(0xFF00E5FF),
+                      onChanged: (val) {
+                        setState(() {
+                          if (activePreset == 'Custom 1') {
+                            custom1Value = val;
+                          } else {
+                            custom2Value = val;
+                          }
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -290,40 +199,28 @@ class _MauDspScreenState extends State<MauDspScreen> {
     );
   }
 
-  Widget _buildPresetTile(String name, IconData icon) {
-    final bool isActive = activePreset == name;
+  Widget _buildButton(String name) {
+    bool isActive = activePreset == name;
     return InkWell(
-      onPressed: () => applyPreset(name),
-      borderRadius: BorderRadius.circular(6),
+      onPressed: () {
+        setState(() {
+          activePreset = name;
+        });
+      },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isActive ? const Color(0xFF00E5FF) : const Color(0xFF161A22),
           borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: isActive ? Colors.white : const Color(0xFF21262D),
-            width: 1.5,
-          ),
+          border: Border.all(color: isActive ? Colors.white : const Color(0xFF2B313B)),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 16,
-              color: isActive ? Colors.black : const Color(0xFF00E5FF),
-            ),
-            const SizedBox(width: 6),
-            Text(
-              name.toUpperCase(),
-              style: TextStyle(
-                color: isActive ? Colors.black : Colors.white70,
-                fontWeight: FontWeight.bold,
-                fontSize: 10,
-                letterSpacing: 1.0,
-              ),
-            ),
-          ],
+        child: Text(
+          name.toUpperCase(),
+          style: TextStyle(
+            color: isActive ? Colors.black : Colors.white70,
+            fontWeight: FontWeight.bold,
+            fontSize: 11,
+          ),
         ),
       ),
     );
